@@ -63,7 +63,7 @@ class Validator {
             if ($groups == $this->count_max) return ; // ex. 3 resistors, max 3 res. chosen, can't mix
             if ($groups==2) {
                 if ($this->count_max==3) $modi = array( array(1,2), array(2,1));
-                if ($this->count_max==4) $modi = array( array(1,2), array(1,3), array(2,1), array(3,1));
+                if ($this->count_max==4) $modi = array( array(1,2), array(1,3), array(2,1), array(3,1),array(2,2));
             }
             if ($groups==3) {
                 if ($this->count_max==4) $modi = array( array(1,1,2), array(1,2,1), array(2,1,1));
