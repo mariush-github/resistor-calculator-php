@@ -90,18 +90,21 @@ Required:
 Optional: 
 
 --min [value]\t\t : minimum resistor value allowed (d=auto,value/100 min=0.01)
---max [value]\t\t : maximum resistor value allowed (d=auto,value*100 m=1000000)
+--max [value]\t\t : maximum resistor value allowed (d=auto,value*100 max=1000000)
 --e [value]\t\t : use resistors defined in this range, AND previous ranges.
 --count [value]\t\t : maximum resistors to use (d=3, m=4)
 --mix [0,1]\t\t : enable groups of resistors in series or parallel (slow)
---tol [value]\t : tolerance, max. drift from value allowed +/- n% (d=1, m=10)
+--tol [value]\t\t : tolerance, max. drift from value allowed +/- n% (d=1, m=10)
 --results [value]\t : maximum results to show (d=25, m=100)
---group [0,1] : group results by number of resistors, from least to most (d=1)
+--group [0,1]\t\t : group results by number of resistors, from least to most (d=1)
 
-Limitations: 
-* maximum 256 unique resistors (64 when count=4). Use --min and --max to reduce larger ranges. 
-* E96, E48 : maximum 3 resistors
-* If the range entered and min-max parameters produce 256+ values, 256 resistor values closest to desired value are used.
+* E series supported: E3, E6, E12, E24, E48, E96, E192
+* The script works with a maximum number of unique resistors, depending on the number of resistor groups:
+** 2 resistor groups: 1024
+** 3 resistor groups: 512
+** 4 resistor groups: 128 
+The script will pick up to that amount of unique unique resistors, with values as close as possible to desired resistor value desired. 
+* You can use the --min and --max parameters to reduce the number of unique resistors or you can specify a lower E series.
 ");
         
     }

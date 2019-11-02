@@ -16,7 +16,7 @@ php calculator.php [ optional parameters ] --value [desired value]
 
 --max [value]: maximum resistor value allowed (d=auto,value*100, m=1000000)
 
---e [value] : use resistors defined in this range, AND previous ranges.
+--e [3,6,..,192] : use resistors defined in this range, AND previous ranges.
 
 --count [value] : maximum resistors to use (d=3, m=4)
 
@@ -28,12 +28,16 @@ php calculator.php [ optional parameters ] --value [desired value]
 
 --group [0,1] : group results by number of resistors, from least to most (d=1)
 
-All results are exported to CSV files (Tab separated columns) in the same folder where the script is located. 
+All results are exported to CSV files (Tab separated columns) in the Output folder (created automatically) where the script is located. 
 
 ### Limitations: 
 
 * E series supported: E3, E6, E12, E24, E48, E96, E192
-* The script works with maximum 256 unique resistors, 64 when total resistor value is 4. The calculator will pick the closest 256 unique resistors around the resistor value desired. 
+* The script works with a maximum number of unique resistors, depending on the number of resistor groups:
+** 2 resistor groups: 1024
+** 3 resistor groups: 512
+** 4 resistor groups: 128 
+The script will pick up to that amount of unique unique resistors, with values as close as possible to desired resistor value desired. 
 * You can use the --min and --max parameters to reduce the number of unique resistors or you can specify a lower E series.
 
 ## Example of usage: 
