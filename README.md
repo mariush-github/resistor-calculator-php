@@ -3,9 +3,9 @@
 The script allows you to combine up to four resistors in parallel or in series to obtain a desired value. 
 
 ## Usage 
-
+```
 php calculator.php [ optional parameters ] --value [desired value]
-
+```
 ### Required parameters:
 
 --value [value] : desired resistor value
@@ -16,7 +16,7 @@ php calculator.php [ optional parameters ] --value [desired value]
 
 --max [value]: maximum resistor value allowed (d=auto,value*100, m=1000000)
 
---e [3,6,..,192] : use resistors defined in this range, AND previous ranges.
+--e [3,6,...,192] : use resistors defined in this range, AND previous ranges.
 
 --count [value] : maximum resistors to use (d=3, m=4)
 
@@ -34,16 +34,21 @@ All results are exported to CSV files (Tab separated columns) in the Output fold
 
 * E series supported: E3, E6, E12, E24, E48, E96, E192
 * The script works with a maximum number of unique resistors, depending on the number of resistor groups:
-** 2 resistor groups: 1024
-** 3 resistor groups: 512
-** 4 resistor groups: 128 
-The script will pick up to that amount of unique unique resistors, with values as close as possible to desired resistor value desired. 
+
+  2 resistor groups: 1024
+
+  3 resistor groups: 512
+
+  4 resistor groups: 128 
+
+The script will pick up to this amount of unique unique resistors, with values as close as possible to desired resistor value desired. 
+
 * You can use the --min and --max parameters to reduce the number of unique resistors or you can specify a lower E series.
 
 ## Example of usage: 
-
+```
 php calculator.php --min 10 --max 10000 --e 24 --count 3 --results 10 --value 100
-
+```
 will produce the following result: 
 
 ```
