@@ -57,6 +57,39 @@ class Resistor {
         return $result;
     }
 
+    function loadResistorsFromFile($filename) {
+        echo "Loading resistors from ".$filename."\n";
+        $text = file_get_contents($filename);
+        if (strlen($text)<1) return false;
+        $text = strtolower($text);
+        // allow dot (ex 2.2) , smd convention (ex 2R2), multiplier (ex 100k, 1m)
+        $text = str_replace('r','.',$text);
+        $text = str_replace(array("\t",' ',chr(0x0D),chr(0x0A)),',',$text);
+        //var_dump($text);
+        $values = explode(',',$text);
+        foreach ($values as $idx => $val) {
+            $value = trim($val);
+            if ($value!=''){
+                // $value = str_replace('r','.',$value);
+                $mul = 1;
+                if (substr($value,0,1)=='.') $value = '0'.$value;
+                $c = substr($value,strlen($value)-1,1);
+                if (ctype_digit($c)==false) {
+                    if ($c=='k') $mul=1000;
+                    if ($c=='m') $mul=1000000;
+                    $value = substr($value,0,strlen($value)-1);
+                }
+                if (is_numeric($value)==true) {
+                    $value = floatval($value) * $mul;
+                    if ($value!=0) {
+                        $this->list[$this->count] = $value;
+                        $this->count++;
+                    }
+                }
+            }
+        }
+        //var_dump($this->list);
+    }
     function loadResistors($range,$min,$max) {
         $br = $this->getBaseResistors($range);
         $bCount = count($br);

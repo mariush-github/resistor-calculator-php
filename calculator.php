@@ -14,7 +14,15 @@ $cfg->displayParameters();
 if ($cfg->get('value')==0) $cfg->displayHelp();
 
 $res = new Resistor();
-$res->loadResistors($cfg->get('e'),$cfg->get('min'),$cfg->get('max'));
+if ($cfg->get('list')!='') {
+    $res->loadResistorsFromFile($cfg->get('list'));
+    if ($res->count()<1) {
+        echo "No resistors loaded from file. Loading default range.\n";
+        $res->loadResistors($cfg->get('e'),$cfg->get('min'),$cfg->get('max'));
+    }
+} else {
+    $res->loadResistors($cfg->get('e'),$cfg->get('min'),$cfg->get('max'));
+}
 $res->arrangeResistors($cfg->get('value'));
 
 $resCount = $res->count();

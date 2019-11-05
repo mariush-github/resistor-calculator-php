@@ -18,6 +18,8 @@ php calculator.php [ optional parameters ] --value [desired value]
 
 --e [3,6,...,192] : use resistors defined in this range, AND previous ranges.
 
+--list filename : load a resistor list from file (E range ignored if used)
+
 --count [value] : maximum resistors to use (d=3, m=4)
 
 --mix [0,1] : enable groups of resistors in series or parallel (d=1, slower)
@@ -44,6 +46,8 @@ All results are exported to CSV files (Tab separated columns) in the Output fold
 The script will pick up to this amount of unique unique resistors, with values as close as possible to desired resistor value desired. 
 
 * You can use the --min and --max parameters to reduce the number of unique resistors or you can specify a lower E series.
+
+* Resistor file must contain values separated by commas, tab or new line characters. You can use r, k and m characters (ex. 2r2 = 2.2 , 100k = 100000, 1m = 1000000) 
 
 ## Example of usage: 
 ```

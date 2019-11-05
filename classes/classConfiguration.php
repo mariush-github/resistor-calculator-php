@@ -6,7 +6,7 @@ class Configuration {
         $this->loadDefaults();
     }
     function loadDefaults() {
-        $this->settings = array('min'=>0, 'max'=>0,'mix'=>0,'tol'=>1,'e'=>24,'results'=>25,'count'=>3,'value'=>0,'group'=>1);
+        $this->settings = array('min'=>0, 'max'=>0,'mix'=>0,'tol'=>1,'e'=>24,'results'=>25,'count'=>3,'value'=>0,'group'=>1,'list'=>'');
     }
     function get($value) {
         return $this->settings[$value];
@@ -26,20 +26,23 @@ class Configuration {
         return TRUE;
     }
     function loadParameters() {
-        $longOpts = array('min:','max:','e:','count:','mix:','results:','tol:','value:','group:');
+        $longOpts = array('min:','max:','e:','count:','mix:','results:','tol:','value:','group:','list:');
 
         $cmdParameters = getopt('',$longOpts);
         
         foreach ($cmdParameters as $key=>$value) {
-            //echo $key."\n";
+            //echo $key.':'.$value."\n";
             if ($this->helper_validNumber($value)==TRUE) {
                 $this->settings[strtolower($key)] = $value;
                 //echo $value."\n";
             }
+            $key = strtolower($key);
+            if ($key=='list') $this->settings['list'] = $value;
         }
     }
 
     function validateParameters() {
+        global $folder;
         if ($this->settings['tol']< 0.01) $this->settings['tol'] = 0.01;
         if ($this->settings['tol']>10.00) $this->settings['tol'] = 10;
         if ($this->settings['results']< 10) $this->settings['results'] = 10;
@@ -66,6 +69,7 @@ class Configuration {
             if ($e==24)  $this->settings['min'] =  ($value_min<10 ) ? $value_min : 10;
             if ($e==12)  $this->settings['min'] =  ($value_min<1  ) ? $value_min : 1;
             if ($e <12)  $this->settings['min'] =  ($value_min<0.1  ) ? $value_min : 0.1;
+            
         }
         if ($this->settings['max']==0) {
             if (($e==192) || ($e==96)) $this->settings['max'] =  $value_max;
@@ -73,8 +77,32 @@ class Configuration {
             if ($e==24)  $this->settings['max'] =  ($value_max>100000 ) ? $value_max : 100000;
             if ($e==12)  $this->settings['max'] =  ($value_max>470000 ) ? $value_max : 470000;
             if ($e <12)  $this->settings['max'] =  ($value_max>820000 ) ? $value_max : 820000;
+            
         }
-    }
+        //var_dump($this->settings['list']);
+        if ($this->settings['list']!='') {
+            $filename = trim($this->settings['list'],'"\' ');
+            $filename = str_replace('\\','/',$filename);
+            //$baseFolder = str_replace(array('\\','//'),'/',__DIR__.'/').'../';
+            $baseFolder = $folder;
+            $hasPathParts = false;
+            if (strpos($filename,'/')!==FALSE) $hasPathParts=true;
+            if (strpos($filename,'\\')!==FALSE) $hasPathParts=true;
+            if ($hasPathParts==false) {
+                $filename = $baseFolder.$filename;
+            } else {
+                if (substr($filename,0,2)=='./') $filename = $baseFolder . substr($filename,2);
+                if (substr($filename,0,3)=='../') $filename = $baseFolder . '../'.substr($filename,3);
+            }
+            //var_dump($filename);
+
+            $h = fopen($filename,'rb');
+            if ($h===FALSE) {
+                $this->settings['list'] = '';
+            }
+            fclose($h);
+        }
+    }    
     function displayParameters() {
         echo "Configuration:\n    range=e".$this->settings['e'].', min='.$this->settings['min'].', max='.$this->settings['max'].', count='.$this->settings['count'].', mix='.$this->settings['mix'].', value='.$this->settings['value']."\n";
     }
@@ -92,6 +120,7 @@ Optional:
 --min [value]\t\t : minimum resistor value allowed (d=auto,value/100 min=0.01)
 --max [value]\t\t : maximum resistor value allowed (d=auto,value*100 max=1000000)
 --e [value]\t\t : use resistors defined in this range, AND previous ranges.
+--list [filename] : load resistors from file (separate values by comma or new line)
 --count [value]\t\t : maximum resistors to use (d=3, m=4)
 --mix [0,1]\t\t : enable groups of resistors in series or parallel (slow)
 --tol [value]\t\t : tolerance, max. drift from value allowed +/- n% (d=1, m=10)
